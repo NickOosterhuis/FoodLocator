@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessService", "ProcessSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModelingService", "DataModelingService\DataModelingService.csproj", "{363615C1-E66F-460D-BAD5-5185FC3F7536}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransferObjects", "DataTransferObjects\DataTransferObjects.csproj", "{DD432F8F-271E-4D95-B81E-EC6B057D492B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{363615C1-E66F-460D-BAD5-5185FC3F7536}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{363615C1-E66F-460D-BAD5-5185FC3F7536}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{363615C1-E66F-460D-BAD5-5185FC3F7536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD432F8F-271E-4D95-B81E-EC6B057D492B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD432F8F-271E-4D95-B81E-EC6B057D492B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD432F8F-271E-4D95-B81E-EC6B057D492B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD432F8F-271E-4D95-B81E-EC6B057D492B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
