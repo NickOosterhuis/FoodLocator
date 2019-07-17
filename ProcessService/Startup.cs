@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using ProcessService.Context;
+using ProcessService.Entities;
+using ProcessService.Interfaces;
+using ProcessService.UnitOfWork;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace ProcessService
 {
@@ -25,6 +28,45 @@ namespace ProcessService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(
+                    Configuration["AppSettings:ConnectionStrings:DefaultConnection"]));
+
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI();
+
+            //when we want custom rights as a user 
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("ElevatedRights", policy =>
+            //         policy.RequireRole(AuthorizePermissionsAttribute.Superuser, AuthorizePermissionsAttribute.SubAccount));
+            //});
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Appsettings:Jwt:Issuer"],
+                        ValidAudience = Configuration["Appsettings:Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Appsettings:Jwt:Key"]))
+                    };
+                }
+            );
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "FoodLocator Process Service", Version = "v1" });
+            });
+
+            services.AddScoped<IUoW, UoW>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -41,6 +83,13 @@ namespace ProcessService
                 app.UseHsts();
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Spacetime Layers Service V1");
+            });
+
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
