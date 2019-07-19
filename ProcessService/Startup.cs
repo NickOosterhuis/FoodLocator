@@ -86,7 +86,7 @@ namespace ProcessService
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Spacetime Layers Service V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FoodLocator Process Service V1");
             });
 
             app.UseAuthentication();
