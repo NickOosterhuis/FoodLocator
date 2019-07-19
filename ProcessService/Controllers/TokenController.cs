@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ProcessService.Context;
 
 namespace ProcessService.Controllers
 {
@@ -30,6 +31,8 @@ namespace ProcessService.Controllers
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = config;
+
+            //Seeder.SeedUsers(userManager, roleManager);
         }
 
         [HttpPost]
