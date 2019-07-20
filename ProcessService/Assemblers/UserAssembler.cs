@@ -13,11 +13,13 @@ namespace ProcessService.Assemblers
     public class UserAssembler
     {
         private readonly IUoW _uow;
-        private readonly UserManager<ApplicationUser> _userManager;        
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationUser> _roleManager;
 
-        public UserAssembler(IUoW uow, UserManager<ApplicationUser> userManager)
+        public UserAssembler(IUoW uow, UserManager<ApplicationUser> userManager, RoleManager<ApplicationUser> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _uow = uow;
         }
 
@@ -170,7 +172,9 @@ namespace ProcessService.Assemblers
             var user = await _uow.UserRepository.FindByCondition(u => u.Id == id).FirstOrDefaultAsync();
             var profile = await _uow.ProfileRepository.FindByCondition(p => p.Id == user.ProfileId).FirstOrDefaultAsync();
 
-            if (user == null)
+            var userRole = await _userManager.IsInRoleAsync(user, "RestaurantOwner");
+
+            if (user == null || userRole == false)
                 return null;
 
             var updatedProfile = new Profile

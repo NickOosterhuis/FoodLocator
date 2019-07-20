@@ -53,10 +53,32 @@ namespace ProcessService.Controllers
         [HttpGet]
         [Route("[action]")]
         [Authorize]
-        public async Task<ActionResult> GetOwnUserAccount(string id)
+        public async Task<ActionResult> GetOwnUserAccount()
         {
-            var result = await _userAssembler.GetOwnProfile(id);
+            var result = await _userAssembler.GetOwnProfile(UserId);
             return Ok(result);
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        [Authorize]
+        public async Task<ActionResult> UpdateOwnUserAccount([FromBody] UserAccount userAccount)
+        {
+            try
+            {
+                var result = await _userAssembler.UpdateUserProfile(UserId, userAccount);
+                return Accepted(result);
+            }
+            catch
+            {
+                var error = new ProcessServiceError
+                {
+                    Error = ServiceErrorCode.ErrorUpdatingUser,
+                    ErrorDescription = "Could not update this user"
+                };
+
+                return BadRequest(error);
+            }
         }
 
         [HttpPut("{id}")]
@@ -110,7 +132,7 @@ namespace ProcessService.Controllers
             try
             {
                 var result = await _userAssembler.UpdateRestaurantFeatured(id, featured);
-                return Ok(result);
+                return Accepted(result);
             }
             catch
             {
