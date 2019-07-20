@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -47,6 +48,80 @@ namespace ProcessService.Controllers
         {
             var result = await _userAssembler.GetUserAccount(id);
             return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetOwnUserAccount(string id)
+        {
+            var result = await _userAssembler.GetOwnProfile(id);
+            return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> UpdateUserAccount(string id, [FromBody] UserAccount userAccount)
+        {
+            try
+            {
+                var result = await _userAssembler.UpdateUserProfile(id, userAccount);
+                return Accepted(result);
+            }
+            catch
+            {
+                var error = new ProcessServiceError
+                {
+                    Error = ServiceErrorCode.ErrorUpdatingUser,
+                    ErrorDescription = "Could not update this user"
+                };
+
+                return BadRequest(error);
+            }
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        [Authorize]
+        public async Task<ActionResult> UpdateProfilePicture(string imageUrl)
+        {
+            try
+            {
+                var result = await _userAssembler.UpdateProfilePicture(UserId, imageUrl);
+                return Accepted(result);
+            }
+            catch
+            {
+                var error = new ProcessServiceError
+                {
+                    Error = ServiceErrorCode.ErrorUpdatingProfilePicture,
+                    ErrorDescription = "Could not update the profile picture"
+                };
+
+                return BadRequest(error);
+            }
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> UpdateRestaurantFeatured(string id, bool featured)
+        {
+            try
+            {
+                var result = await _userAssembler.UpdateRestaurantFeatured(id, featured);
+                return Ok(result);
+            }
+            catch
+            {
+                var error = new ProcessServiceError
+                {
+                    Error = ServiceErrorCode.ErrorUpdatingRestaurantFeatured,
+                    ErrorDescription = "Could not update restaurant featured"
+                };
+
+                return BadRequest(error);
+            }
         }
 
 
