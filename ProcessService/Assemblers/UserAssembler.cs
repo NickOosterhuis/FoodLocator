@@ -114,7 +114,8 @@ namespace ProcessService.Assemblers
 
         public async Task<UserAccount> UpdateUserProfile(string id, UserAccount userAccount)
         {
-            var user = await _uow.UserRepository.FindByCondition(u => u.Id == id).FirstOrDefaultAsync();            
+            var user = await _uow.UserRepository.FindByCondition(u => u.Id == id).FirstOrDefaultAsync();
+            var profile = await _uow.ProfileRepository.FindByCondition(p => p.Id == user.ProfileId).FirstOrDefaultAsync();
 
             if (user == null)
                 return null;
@@ -124,7 +125,7 @@ namespace ProcessService.Assemblers
                 LockedOut = userAccount.LockedOut,
                 Name = userAccount.Name,
                 ProfilePicsture = userAccount.ProfilePicture,
-                RestaurantFeatured = userAccount.RestaurantFeatured
+                RestaurantFeatured = profile.RestaurantFeatured
             };
 
             _uow.ProfileRepository.Update(updatedProfile);
