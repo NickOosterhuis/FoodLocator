@@ -32,7 +32,7 @@ namespace ProcessService.Controllers
             _roleManager = roleManager;
             _config = config;
 
-            //Seeder.SeedUsers(userManager, roleManager);
+            Seeder.SeedUsers(userManager, roleManager);
         }
 
         [HttpPost]
