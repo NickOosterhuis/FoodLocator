@@ -15,7 +15,7 @@ namespace ProcessService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Produces("application/json")]    
+    [Produces("application/json")]
     public class UserController : ControllerBase
     {
         private readonly IUoW _uow;
@@ -34,11 +34,22 @@ namespace ProcessService.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> GetAllAccounts()
         {
             var results = await _userAssembler.GetUserAccounts();
             return Ok(results);
         }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetAccountById(string id)
+        {
+            var result = await _userAssembler.GetUserAccount(id);
+            return Ok(result);
+        }
+
+
 
 
 
