@@ -13,13 +13,11 @@ namespace ProcessService.Assemblers
     public class UserAssembler
     {
         private readonly IUoW _uow;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationUser> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;        
 
-        public UserAssembler(IUoW uow, UserManager<ApplicationUser> userManager, RoleManager<ApplicationUser> roleManager)
+        public UserAssembler(IUoW uow, UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+            _userManager = userManager;            
             _uow = uow;
         }
 
