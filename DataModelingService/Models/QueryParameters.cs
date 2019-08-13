@@ -12,7 +12,7 @@ namespace DataModelingService.Models
         public Location Location { get; set; }
 
         [AliasAs("radius")]
-        public string Radius { get; set; }
+        public double? Radius { get; set; }
 
         #region optional parameters
 
