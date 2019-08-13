@@ -28,7 +28,7 @@ namespace ProcessService.Mail
                 MailMessage mailMessage = new MailMessage();
                 mailMessage.From = new MailAddress("info@foodlocator.com");
                 mailMessage.To.Add(email);
-                mailMessage.Subject = "You've been added to the FoodLocator platoform!";
+                mailMessage.Subject = "You've been added to the FoodLocator platform!";
 
                 string callbackUrl = $"{_config["AppSettings:Web:BaseUrl"]}/Account/Confirm?id={userId}&code={confirmationToken}";
                 mailMessage.Body = $"callbackurl: {callbackUrl}";
